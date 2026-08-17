@@ -1,0 +1,69 @@
+import {
+  GetProjectUrl,
+  languageID,
+  languageName,
+  localization,
+  SetHeaders,
+  SetRedirect,
+  token,
+} from "../../../request";
+import { redirectManager } from "../../../utils/operation/redirectManager";
+export default async function APIHandling(url, methodType, sendBody) {
+  var myHeaders = new Headers();
+  for (const [key, value] of Object.entries(SetHeaders())) {
+    myHeaders.append(key, value);
+  }
+
+  // myHeaders.append("languageName", "ARABIC");
+  var raw = JSON.stringify(sendBody);
+
+  var requestOptions = {
+    method: methodType,
+    headers: myHeaders,
+    // body: raw,
+    redirect: "follow",
+  };
+
+  if (methodType !== "Get") requestOptions = { ...requestOptions, body: raw };
+  try {
+    
+    const response = await fetch(url, requestOptions);
+    const result = await response.json();
+
+    // Check if the API call was successful based on the HTTP status code
+    if (response.ok) {
+      const successResponse = {
+        success: true,
+        data: result,
+      };
+      return successResponse;
+    } else {
+      const errorResponse = {
+        success: false,
+        error: result, // You can customize this based on your API response structure
+      };
+      if (result.status === 401) {
+        //todo handle error message
+        redirectManager.set({
+          route: "login",
+          mess: localization?.login?.loginNotify,
+        });
+      } else if (result.status === 500) {
+        redirectManager.set({
+          route: "serverError",
+          mess: "",
+        });
+      } else if (result.status === 204) {
+        return { ...errorResponse, statusCode: 204 };
+      }
+      return errorResponse;
+    }
+  } catch (error) {
+    // If there's an exception, return an error response
+    const exceptionResponse = {
+      success: false,
+      error: `An error occurred during the API call.error: ${error}`,
+    };
+    return exceptionResponse;
+  }
+}

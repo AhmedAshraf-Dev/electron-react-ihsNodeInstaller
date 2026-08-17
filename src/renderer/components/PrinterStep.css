@@ -1,0 +1,191 @@
+/* ============================================================
+   PrinterStep.css
+   ============================================================ */
+
+.printer-step {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 32px;
+  box-sizing: border-box;
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+.printer-header {
+  margin-bottom: 30px;
+}
+
+.printer-header h2 {
+  margin: 0 0 10px;
+  font-size: 28px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.printer-header p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #6b7280;
+}
+
+/* ============================================================
+   FORM
+   ============================================================ */
+
+.printer-step form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.form-group input {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 14px;
+  box-sizing: border-box;
+
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+
+  background: #ffffff;
+  color: #111827;
+
+  font-size: 14px;
+
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.form-group input:focus {
+  border-color: #2563eb;
+
+  box-shadow:
+    0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.form-group input:disabled {
+  background: #f3f4f6;
+  cursor: not-allowed;
+}
+
+.form-group small {
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+/* ============================================================
+   ERROR
+   ============================================================ */
+
+.error-box {
+  display: flex;
+  align-items: center;
+
+  margin-bottom: 22px;
+  padding: 12px 16px;
+
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+
+  background: #fef2f2;
+  color: #b91c1c;
+
+  font-size: 14px;
+}
+
+/* ============================================================
+   ACTIONS
+   ============================================================ */
+
+.printer-actions {
+  display: flex;
+  justify-content: flex-end;
+
+  margin-top: 10px;
+  padding-top: 24px;
+
+  border-top: 1px solid #e5e7eb;
+}
+
+/* ============================================================
+   BUTTON
+   ============================================================ */
+
+.printer-actions .btn {
+  min-width: 130px;
+  min-height: 44px;
+
+  padding: 10px 22px;
+
+  border: none;
+  border-radius: 8px;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    transform 0.1s ease,
+    opacity 0.2s ease;
+}
+
+.printer-actions .btn-primary {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.printer-actions .btn-primary:hover:not(:disabled) {
+  background: #1d4ed8;
+}
+
+.printer-actions .btn-primary:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.printer-actions .btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 700px) {
+  .printer-step {
+    padding: 20px;
+  }
+
+  .printer-header h2 {
+    font-size: 24px;
+  }
+
+  .printer-actions {
+    justify-content: stretch;
+  }
+
+  .printer-actions .btn {
+    width: 100%;
+  }
+}
