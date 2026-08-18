@@ -76,7 +76,9 @@ const validateForm = () => {
 
   // 1. Installation path validation
   if (!installPath?.trim()) {
-    validationErrors.installPath = "Installation location is required.";
+    validationErrors.installPath =
+      localization?.setup?.installationLocationStep?.validationRequired ||
+      "Installation location is required.";
   }
 
   
@@ -105,7 +107,7 @@ const validateForm = () => {
             ================================================== */}
 
         <div className="form-group">
-          <label>{localization?.setup?.installationLocation ||
+          <label>{localization?.setup?.installationLocationStep?.installationLocation ||
                 "Installation Location"}</label>
 
           <div className="path-input">
@@ -113,7 +115,7 @@ const validateForm = () => {
               type="text"
               value={installPath}
               readOnly
-              placeholder="Select installation location"
+              placeholder={localization?.setup?.installationLocationStep?.placeholder || "Select installation location"}
               disabled={loading}
             />
 

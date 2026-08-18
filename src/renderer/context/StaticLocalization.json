@@ -1,1 +1,106 @@
-{}
+{
+  "appInfo": {
+    "title": "IHS Installer"
+  },
+  "setup": {
+    "title": "IHS Portal Setup",
+    "subtitle": "System Configuration & Onboarding",
+    "loading": "Loading...",
+    "back": "Back",
+    "backAriaLabel": "Go back to previous step",
+    "session": "Session:",
+    "copyright": "© 2024 IHS Technologies. All rights reserved.",
+    "cancel": "Cancel",
+    "continue": "Continue",
+    "browse": "Browse",
+    "required": "⚠️ Please complete all required fields before continuing.",
+    "steps": {
+      "InstallationLocation": "Installation Location",
+      "PRINTER": "Printer Setup",
+      "PORTAL": "Portal Setup",
+      "REVIEW": "Review",
+      "COMPLETE": "Complete"
+    },
+    "installationLocationStep": {
+      "title": "Install Configuration",
+      "desc": "Configure the installation location.",
+      "installationLocation": "Installation Location",
+      "placeholder": "Select installation location",
+      "validationRequired": "Installation location is required."
+    },
+    "printerStep": {
+      "title": "Printer Configuration",
+      "desc": "Test the configured printers.",
+      "formLabel": "Configured Printers",
+      "noPrinters": "No printers were configured.",
+      "printerFallback": "Printer",
+      "selectPrinter": "Select printer",
+      "unknownPrinter": "Unknown Printer",
+      "testButtonText": "Test",
+      "testingButtonText": "Testing...",
+      "testSuccess": "Printer test completed successfully.",
+      "testFailed": "Failed to test the printer.",
+      "validationAtLeastOne": "At least one printer is required.",
+      "validationSelect": "Please select a printer for {printer}.",
+      "validationTest": "Please run a successful test for {printer} before proceeding.",
+      "printerNumber": "Printer {number}"
+    },
+    "portalSetup": {
+      "title": "Complete Setup in Portal",
+      "desc": "Complete all steps in the portal. Setup will continue automatically.",
+      "dismiss": "Dismiss",
+      "retry": "Retry",
+      "portal": "Portal:",
+      "refresh": "🔄 Refresh",
+      "refreshPortal": "Refresh Portal",
+      "openInBrowser": "🌐 Open in Browser",
+      "connecting": "⏳ Connecting...",
+      "connected": "✅ Connected",
+      "disconnected": "❌ Disconnected",
+      "loadingPortal": "Loading portal...",
+      "pleaseWait": "Please wait...",
+      "iframeTitle": "IHS Portal Setup",
+      "cancelSetup": "Cancel Setup",
+      "tip": "💡 Tip:",
+      "whenCompleted": "The portal will send setup data automatically when completed.",
+      "waiting": "⏳ Waiting for portal to load...",
+      "unknownError": "Unknown error",
+      "loadError": "Failed to load portal. Please check your connection."
+    },
+    "reviewStep": {
+      "progress": "Review Progress",
+      "checklist": "CHECKLIST",
+      "done": "DONE",
+      "empty": "(empty)",
+      "nodeConfiguration": "Node configuration",
+      "clientConfiguration": "Client configuration",
+      "installationPath": "Installation path",
+      "diskSpace": "Disk space",
+      "printersAssigned": "Printers assigned",
+      "install": "Install Service",
+      "installing": "Installing...",
+      "diskSpaceUnavailable": "Disk space API is not available.",
+      "diskSpaceCheckFailed": "Failed to check disk space.",
+      "diskSpaceUnavailableMessage": "Unable to check available disk space."
+    },
+    "completeStep": {
+      "title": "Installation Complete!",
+      "successMessage": "The IHS Client Node service has been successfully installed and configured.",
+      "serviceInformation": "Service Information",
+      "serviceName": "Service Name",
+      "status": "Status",
+      "nodeId": "Node ID",
+      "clientKey": "Client Key",
+      "running": "🟢 Running",
+      "stopped": "🔴 Stopped",
+      "nextSteps": "Next Steps",
+      "serviceInstalled": "✅ Service installed and configured to start with Windows",
+      "clientKeyGenerated": "✅ Client key generated and stored securely",
+      "configurationSaved": "✅ Configuration saved to appsettings.json",
+      "serviceConnect": "🔄 Service will automatically connect to the portal",
+      "monitorService": "📊 Monitor service status from Windows Services (services.msc)",
+      "finish": "Finish",
+      "reinstall": "Reinstall"
+    }
+  }
+}

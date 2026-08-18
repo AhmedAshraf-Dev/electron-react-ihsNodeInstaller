@@ -46,6 +46,13 @@ function App() {
   useEffect(() => {
     window.document.dir = Right ? "rtl" : "ltr";
   }, [Right]);
+  useEffect(() => {
+    //SelectFirstLanguage();
+    //PrepareLanguage();
+    if (localization && localization.appInfo && localization.appInfo.title) {
+      document.title = localization.appInfo.title;
+    }
+  }, []);
   // ==========================================================
   // RENDER CURRENT STEP
   // ==========================================================
@@ -167,7 +174,9 @@ function App() {
               type="button"
               className="btn-back-modern"
               onClick={handlePreviousStep}
-              aria-label="Go back to previous step"
+              aria-label={
+                localization?.setup?.backAriaLabel || "Go back to previous step"
+              }
               disabled={!isStepBackVisible}
             >
               <span className="back-arrow">{Right ? "→" : "←"}</span>

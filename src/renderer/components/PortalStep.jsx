@@ -50,7 +50,7 @@ export function PortalStep({
           setIsConnecting(false);
           break;
         case "SETUP_ERROR":
-          setIframeError(payload?.message || "Unknown error");
+          setIframeError(payload?.message || localization?.setup?.portalSetup?.unknownError || "Unknown error");
           break;
         case "FORM_SUBMIT":
           handlePortalNext(payload);
@@ -62,7 +62,7 @@ export function PortalStep({
 
     window.addEventListener("message", handleMessage);
     return () => window.removeEventListener("message", handleMessage);
-  }, [onSetupComplete]);
+  }, [onSetupComplete, handlePortalNext, localization]);
 
   // Send ready message to iframe when it loads
   useEffect(() => {
@@ -94,7 +94,7 @@ export function PortalStep({
 
   const handleIframeError = () => {
     console.error("❌ Iframe failed to load");
-    setIframeError("Failed to load portal. Please check your connection.");
+    setIframeError(localization?.setup?.portalSetup?.loadError || "Failed to load portal. Please check your connection.");
     setIsConnecting(false);
   };
 
@@ -185,7 +185,7 @@ export function PortalStep({
           </button>
           <span className="connection-status">
             {isConnecting
-              ? "⏳ Connecting..."
+              ? localization?.setup?.portalSetup?.connecting || "⏳ Connecting..."
               : iframeLoaded
                 ? localization?.setup?.portalSetup?.connected || "✅ Connected"
                 : localization?.setup?.portalSetup?.disconnected ||
@@ -224,7 +224,7 @@ export function PortalStep({
           onError={handleIframeError}
           sandbox="allow-scripts allow-forms allow-same-origin allow-popups allow-modals"
           allow="camera; microphone; fullscreen"
-          title="IHS Portal Setup"
+          title={localization?.setup?.portalSetup?.iframeTitle || "IHS Portal Setup"}
         />
       </div>
 

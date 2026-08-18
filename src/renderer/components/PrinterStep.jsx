@@ -82,8 +82,8 @@ export function PrinterStep({ setupResponse, onNext, loading, error }) {
         [printerId]: {
           success: !!result?.success,
           message: result?.success
-            ? "Printer test completed successfully."
-            : result?.error || "Failed to test the printer.",
+            ? localization?.setup?.printerStep?.testSuccess || "Printer test completed successfully."
+            : result?.error || localization?.setup?.printerStep?.testFailed || "Failed to test the printer.",
         },
       }));
     } catch (err) {
@@ -93,7 +93,7 @@ export function PrinterStep({ setupResponse, onNext, loading, error }) {
         ...previous,
         [printerId]: {
           success: false,
-          message: err.message || "Failed to test the printer.",
+          message: err.message || localization?.setup?.printerStep?.testFailed || "Failed to test the printer.",
         },
       }));
     } finally {
@@ -180,7 +180,7 @@ const validateForm = () => {
 
   // 2. Configured printers & testing validation
   if (!configuredPrinters || configuredPrinters.length === 0) {
-    validationErrors.printers = "At least one printer is required.";
+    validationErrors.printers = localization?.setup?.printerStep?.validationAtLeastOne || "At least one printer is required.";
   } else {
     configuredPrinters.forEach((printer, index) => {
       const printerId = `${printer?.PrinterName || printer?.printerLabel}-${index}`;
@@ -191,16 +191,16 @@ const validateForm = () => {
         "";
 
       if (!selectedPrinter) {
+        const printerLabel = printer?.printerLabel ||
+          (localization?.setup?.printerStep?.printerNumber || "Printer {number}").replace("{number}", index + 1);
         validationErrors[`printer_${printerId}`] =
-          `Please select a printer for ${
-            printer?.printerLabel || `Printer ${index + 1}`
-          }.`;
+          (localization?.setup?.printerStep?.validationSelect || "Please select a printer for {printer}.").replace("{printer}", printerLabel);
       } else if (!printerTestResults[printerId]?.success) {
         // Checks if printer was tested and succeeded
+        const printerLabel = printer?.printerLabel ||
+          (localization?.setup?.printerStep?.printerNumber || "Printer {number}").replace("{number}", index + 1);
         validationErrors[`test_${printerId}`] =
-          `Please run a successful test for ${
-            printer?.printerLabel || `Printer ${index + 1}`
-          } before proceeding.`;
+          (localization?.setup?.printerStep?.validationTest || "Please run a successful test for {printer} before proceeding.").replace("{printer}", printerLabel);
       }
     });
   }
@@ -213,7 +213,7 @@ const validateForm = () => {
         <h2>{localization?.setup?.printerStep?.title || "Printer Configuration"}</h2>
 
         <p>
-          {localization?.setup?.PrinterStep?.desc ||
+          {localization?.setup?.printerStep?.desc ||
             "Test the configured printers."}
         </p>
       </div>
@@ -228,13 +228,13 @@ const validateForm = () => {
 
         <div className="form-group">
   <label>
-    {localization?.setup?.PrinterStep?.formLabel ||
+    {localization?.setup?.printerStep?.formLabel ||
       "Configured Printers"}
   </label>
 
   {configuredPrinters?.length === 0 ? (
     <div className="no-printers">
-      {localization?.setup?.PrinterStep?.noPrinters ||
+      {localization?.setup?.printerStep?.noPrinters ||
         "No printers were configured."}
     </div>
   ) : (
@@ -263,7 +263,7 @@ const haveTest = printerTestResults[printer?.PrinterName ];
 
             <div className="configured-printer-info">
               <div className="printer-name">
-                🖨️ {printer?.PrinterLabel || "Printer"}
+                🖨️ {printer?.PrinterLabel || localization?.setup?.printerStep?.printerFallback || "Printer"}
               </div>
             </div>
 
@@ -296,7 +296,7 @@ const haveTest = printerTestResults[printer?.PrinterName ];
                 }
               >
                 <option value="">
-                  {localization?.setup?.PrinterStep?.selectPrinter ||
+                  {localization?.setup?.printerStep?.selectPrinter ||
                     "Select printer"}
                 </option>
 
@@ -307,7 +307,7 @@ const haveTest = printerTestResults[printer?.PrinterName ];
                   >
                     {sysPrinter?.displayName ||
                       sysPrinter?.name ||
-                      "Unknown Printer"}
+                      localization?.setup?.printerStep?.unknownPrinter || "Unknown Printer"}
                   </option>
                 ))}
               </select>
@@ -338,9 +338,9 @@ const haveTest = printerTestResults[printer?.PrinterName ];
                 }
               >
                 {isTesting
-                  ? localization?.setup?.PrinterStep
+                  ? localization?.setup?.printerStep
                       ?.testingButtonText || "Testing..."
-                  : localization?.setup?.PrinterStep
+                  : localization?.setup?.printerStep
                       ?.testButtonText || "Test"}
               </button>
             </div>

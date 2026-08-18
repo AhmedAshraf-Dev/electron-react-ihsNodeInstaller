@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   getStepByKey,
   getStepIndexByKey,
 } from "../hooks/AppHooks/setup/constants";
+import { LanguageContext } from "../context/Language";
 
 export const StepIndicator = ({
   currentStep,
   handlePreviousStep = () => {},
   steps = [],
 }) => {
+  const { localization } = useContext(LanguageContext);
   const currentIndex = getStepIndexByKey(currentStep?.key);
 
   const arrayIndex = steps.findIndex((s) => s.key === currentStep?.key);
@@ -87,7 +89,7 @@ export const StepIndicator = ({
                 }
               `}
                 >
-                  {step.label}
+                  {localization?.setup?.steps?.[step.key] || step.label}
                 </span>
               </div>
 
