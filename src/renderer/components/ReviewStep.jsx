@@ -31,7 +31,9 @@ export const ReviewStep = ({
   // Set Default Installation Path
   useEffect(() => {
     if (!setupResponse) return;
-
+    console.log("====================================");
+    console.log(setupResponse, "setupResponse test 1234");
+    console.log("====================================");
     const nodeId = setupResponse?.nodeID ?? setupResponse?.nodeId ?? "default";
     const defaultPath =
       setupResponse?.installPath || `${DEFAULT_INSTALL_ROOT}\\Node_${nodeId}`;
@@ -39,7 +41,7 @@ export const ReviewStep = ({
     setInstallPath(defaultPath);
     setNodeID(nodeId);
     setOrderType(setupResponse?.orderType || -1);
-    setToken(setupResponse?.token || "");
+    setToken(setupResponse?.appKey || "");
     const assignedPrinters =
       setupResponse?.printers ?? setupResponse?.assignedPrinters;
 
