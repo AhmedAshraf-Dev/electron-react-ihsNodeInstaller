@@ -2,7 +2,6 @@
    PrinterStep.css
    ============================================================ */
 
-
 /* ============================================================
    MAIN CONTAINER
    ============================================================ */
@@ -13,8 +12,10 @@
   margin: 0 auto;
   padding: 32px;
   box-sizing: border-box;
-}
 
+  background: var(--base-bg);
+  color: var(--base-text-color);
+}
 
 /* ============================================================
    HEADER
@@ -28,16 +29,16 @@
   margin: 0 0 10px;
   font-size: 28px;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--base-text-color);
 }
 
 .printer-header p {
   margin: 0;
   font-size: 15px;
   line-height: 1.6;
-  color: #6b7280;
+  color: var(--base-text-color);
+  opacity: 0.65;
 }
-
 
 /* ============================================================
    FORM
@@ -58,9 +59,8 @@
 .form-group label {
   font-size: 14px;
   font-weight: 600;
-  color: #374151;
+  color: var(--base-text-color);
 }
-
 
 /* ============================================================
    INPUT
@@ -69,42 +69,42 @@
 .form-group input {
   width: 100%;
   min-height: 44px;
-
   padding: 10px 14px;
   box-sizing: border-box;
 
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--base-border-color);
   border-radius: 8px;
 
-  background: #ffffff;
-  color: #111827;
+  background: var(--base-bg);
+  color: var(--base-text-color);
 
   font-size: 14px;
-
   outline: none;
 
   transition:
     border-color 0.2s ease,
-    box-shadow 0.2s ease;
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
 }
 
 .form-group input:focus {
-  border-color: #2563eb;
+  border-color: var(--base-accent);
 
-  box-shadow:
-    0 0 0 3px rgba(37, 99, 235, 0.12);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--base-accent) 12%, transparent);
 }
 
 .form-group input:disabled {
-  background: #f3f4f6;
+  background: var(--base-border-color);
+  color: var(--base-text-color);
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
 .form-group small {
   font-size: 12px;
-  color: #9ca3af;
+  color: var(--base-text-color);
+  opacity: 0.55;
 }
-
 
 /* ============================================================
    CONFIGURED PRINTERS
@@ -119,26 +119,24 @@
 .configured-printer {
   width: 100%;
   padding: 16px;
-
   box-sizing: border-box;
 
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--base-border-color);
   border-radius: 10px;
 
-  background: #ffffff;
+  background: var(--base-bg);
 
   transition:
     border-color 0.2s ease,
-    box-shadow 0.2s ease;
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
 }
 
 .configured-printer:hover {
-  border-color: #d1d5db;
+  border-color: var(--base-accent);
 
-  box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px var(--base-overlay);
 }
-
 
 /* ============================================================
    PRINTER INFORMATION
@@ -147,18 +145,15 @@
 .configured-printer-info {
   display: flex;
   align-items: center;
-
   margin-bottom: 12px;
 }
 
 .printer-name {
   font-size: 15px;
   font-weight: 600;
-  color: #1f2937;
-
+  color: var(--base-text-color);
   word-break: break-word;
 }
-
 
 /* ============================================================
    PRINTER SELECTOR
@@ -171,21 +166,17 @@
 .printer-selector select {
   width: 100%;
   min-height: 44px;
-
   padding: 10px 14px;
-
   box-sizing: border-box;
 
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--base-border-color);
   border-radius: 8px;
 
-  background-color: #ffffff;
-  color: #111827;
+  background-color: var(--base-bg);
+  color: var(--base-text-color);
 
   font-size: 14px;
-
   outline: none;
-
   cursor: pointer;
 
   transition:
@@ -195,23 +186,21 @@
 }
 
 .printer-selector select:hover:not(:disabled) {
-  border-color: #9ca3af;
+  border-color: var(--base-accent);
 }
 
 .printer-selector select:focus {
-  border-color: #2563eb;
+  border-color: var(--base-accent);
 
-  box-shadow:
-    0 0 0 3px rgba(37, 99, 235, 0.12);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--base-accent) 12%, transparent);
 }
 
 .printer-selector select:disabled {
-  background-color: #f3f4f6;
-  color: #9ca3af;
-
+  background-color: var(--base-border-color);
+  color: var(--base-text-color);
+  opacity: 0.6;
   cursor: not-allowed;
 }
-
 
 /* ============================================================
    TEST PRINTER BUTTON
@@ -220,19 +209,17 @@
 .test-printer-btn {
   width: 100%;
   min-height: 42px;
-
   margin-top: 12px;
   padding: 9px 16px;
 
-  border: 1px solid #2563eb;
+  border: 1px solid var(--base-accent);
   border-radius: 8px;
 
-  background: #ffffff;
-  color: #2563eb;
+  background: var(--base-bg);
+  color: var(--base-accent);
 
   font-size: 14px;
   font-weight: 600;
-
   cursor: pointer;
 
   transition:
@@ -244,8 +231,8 @@
 }
 
 .test-printer-btn:hover:not(:disabled) {
-  background: #2563eb;
-  color: #ffffff;
+  background: var(--base-accent);
+  color: var(--base-bg);
 }
 
 .test-printer-btn:active:not(:disabled) {
@@ -256,7 +243,6 @@
   opacity: 0.6;
   cursor: not-allowed;
 }
-
 
 /* ============================================================
    PRINTER TEST RESULT
@@ -274,17 +260,16 @@
 }
 
 .printer-test-success {
-  border: 1px solid #bbf7d0;
-  background: #f0fdf4;
-  color: #15803d;
+  border: 1px solid var(--success);
+  background: var(--base-bg);
+  color: var(--success);
 }
 
 .printer-test-error {
-  border: 1px solid #fecaca;
-  background: #fef2f2;
-  color: #b91c1c;
+  border: 1px solid var(--error);
+  background: var(--base-bg);
+  color: var(--error);
 }
-
 
 /* ============================================================
    NO PRINTERS
@@ -293,17 +278,17 @@
 .no-printers {
   padding: 18px;
 
-  border: 1px dashed #d1d5db;
+  border: 1px dashed var(--base-border-color);
   border-radius: 8px;
 
-  background: #f9fafb;
+  background: var(--base-bg);
+  color: var(--base-text-color);
 
-  color: #6b7280;
+  opacity: 0.7;
 
   font-size: 14px;
   text-align: center;
 }
-
 
 /* ============================================================
    PATH INPUT
@@ -313,7 +298,6 @@
   display: flex;
   align-items: center;
   gap: 10px;
-
   width: 100%;
 }
 
@@ -326,7 +310,6 @@
   flex-shrink: 0;
 }
 
-
 /* ============================================================
    ERROR
    ============================================================ */
@@ -338,15 +321,14 @@
   margin-bottom: 22px;
   padding: 12px 16px;
 
-  border: 1px solid #fecaca;
+  border: 1px solid var(--error);
   border-radius: 8px;
 
-  background: #fef2f2;
-  color: #b91c1c;
+  background: var(--base-bg);
+  color: var(--error);
 
   font-size: 14px;
 }
-
 
 /* ============================================================
    ACTIONS
@@ -361,10 +343,10 @@
 .printer-actions {
   margin-top: auto;
   padding-top: 20px;
+
   display: flex;
   justify-content: flex-end;
 }
-
 
 /* ============================================================
    BUTTON
@@ -373,7 +355,6 @@
 .printer-actions .btn {
   min-width: 130px;
   min-height: 44px;
-
   padding: 10px 22px;
 
   border: none;
@@ -381,7 +362,6 @@
 
   font-size: 14px;
   font-weight: 600;
-
   cursor: pointer;
 
   transition:
@@ -391,12 +371,12 @@
 }
 
 .printer-actions .btn-primary {
-  background: #2563eb;
-  color: #ffffff;
+  background: var(--base-accent);
+  color: var(--base-bg);
 }
 
 .printer-actions .btn-primary:hover:not(:disabled) {
-  background: #1d4ed8;
+  background: var(--base-primary);
 }
 
 .printer-actions .btn-primary:active:not(:disabled) {
@@ -408,25 +388,22 @@
   cursor: not-allowed;
 }
 
-
 /* ============================================================
    SECONDARY BUTTON
    ============================================================ */
 
 .btn-secondary {
   min-height: 44px;
-
   padding: 10px 18px;
 
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--base-border-color);
   border-radius: 8px;
 
-  background: #ffffff;
-  color: #374151;
+  background: var(--base-bg);
+  color: var(--base-text-color);
 
   font-size: 14px;
   font-weight: 600;
-
   cursor: pointer;
 
   transition:
@@ -437,15 +414,15 @@
 }
 
 .btn-secondary:hover:not(:disabled) {
-  background: #f9fafb;
-  border-color: #9ca3af;
+  background: var(--base-primary);
+  border-color: var(--base-primary);
+  color: var(--base-bg);
 }
 
 .btn-secondary:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
-
 
 /* ============================================================
    RESPONSIVE

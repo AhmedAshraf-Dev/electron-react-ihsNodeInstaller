@@ -89,6 +89,7 @@ const LanguageSelector = ({ open }) => {
       window.localStorage.setItem("localization", JSON.stringify(marge));
     }
   }, [localization, setLocalization]);
+
   return (
     <>
       {open ? (

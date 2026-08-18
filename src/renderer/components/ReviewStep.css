@@ -1,8 +1,13 @@
 .review-container {
   max-width: 500px;
   font-family: monospace, sans-serif;
-  color: #333;
+  color: var(--base-text-color);
+  background: var(--base-bg);
 }
+
+/* ============================================================
+   PROGRESS
+   ============================================================ */
 
 .review-progress-section {
   margin-bottom: 24px;
@@ -13,21 +18,26 @@
   justify-content: space-between;
   font-weight: bold;
   margin-bottom: 8px;
+  color: var(--base-text-color);
 }
 
 .progress-bar-track {
   width: 100%;
   height: 16px;
-  background-color: #e0e0e0;
+  background-color: var(--base-border-color);
   border-radius: 4px;
   overflow: hidden;
 }
 
 .progress-bar-fill {
   height: 100%;
-  background-color: #007bff;
+  background-color: var(--base-accent);
   transition: width 0.3s ease;
 }
+
+/* ============================================================
+   REVIEW SECTION
+   ============================================================ */
 
 .review-section {
   margin-bottom: 24px;
@@ -37,29 +47,40 @@
   font-weight: bold;
   letter-spacing: 1px;
   margin-bottom: 4px;
+  color: var(--base-text-color);
 }
 
 .section-divider {
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid var(--base-border-color);
   margin-bottom: 12px;
 }
 
 .empty-text {
-  color: #888;
+  color: var(--base-text-color);
+  opacity: 0.55;
   font-style: italic;
 }
+
+/* ============================================================
+   CHECKLIST
+   ============================================================ */
 
 .checklist-row {
   display: flex;
   align-items: center;
   gap: 8px;
   margin-bottom: 6px;
+  color: var(--base-text-color);
 }
 
 .checklist-row.completed .status-icon {
-  color: #28a745;
+  color: var(--success);
   font-weight: bold;
 }
+
+/* ============================================================
+   ACTIONS
+   ============================================================ */
 
 .review-actions {
   display: flex;
@@ -68,24 +89,59 @@
   margin-top: 32px;
 }
 
+/* ============================================================
+   INSTALL BUTTON
+   ============================================================ */
+
 .btn-install {
-  background-color: #007bff;
-  color: white;
+  background-color: var(--base-accent);
+  color: var(--base-bg);
   border: none;
+
   padding: 8px 16px;
   border-radius: 4px;
+
   cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.btn-install:hover:not(:disabled) {
+  background-color: var(--base-primary);
 }
 
 .btn-install:disabled {
-  background-color: #ccc;
+  background-color: var(--base-border-color);
+  color: var(--base-text-color);
+  opacity: 0.55;
   cursor: not-allowed;
 }
 
+/* ============================================================
+   SECONDARY BUTTON
+   ============================================================ */
+
 .btn-secondary {
-  background-color: transparent;
-  border: 1px solid #ccc;
+  background-color: var(--base-bg);
+  color: var(--base-text-color);
+
+  border: 1px solid var(--base-border-color);
+
   padding: 8px 16px;
   border-radius: 4px;
+
   cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background-color: var(--base-primary);
+  border-color: var(--base-primary);
+  color: var(--base-bg);
 }

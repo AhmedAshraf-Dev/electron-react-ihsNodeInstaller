@@ -9,8 +9,8 @@
   width: 100%;
   height: 100%;
   min-height: 0;
-  background: #ffffff;
-  color: #1f2937;
+  background: var(--base-bg);
+  color: var(--base-text-color);
   overflow: hidden;
 }
 
@@ -21,22 +21,23 @@
 .portal-header {
   flex-shrink: 0;
   padding: 24px 28px 16px;
-  border-bottom: 1px solid #e5e7eb;
-  background: #ffffff;
+  border-bottom: 1px solid var(--base-border-color);
+  background: var(--base-bg);
 }
 
 .content-title {
   margin: 0;
   font-size: 22px;
   font-weight: 600;
-  color: #111827;
+  color: var(--base-text-color);
 }
 
 .content-description {
   margin: 6px 0 18px;
   font-size: 14px;
   line-height: 1.5;
-  color: #6b7280;
+  color: var(--base-text-color);
+  opacity: 0.65;
 }
 
 /* ============================================================
@@ -48,36 +49,32 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-
   margin-bottom: 14px;
   padding: 10px 14px;
-
-  border: 1px solid #fecaca;
+  border: 1px solid var(--error);
   border-radius: 6px;
-
-  background: #fef2f2;
-  color: #991b1b;
-
+  background: var(--base-bg);
+  color: var(--error);
   font-size: 13px;
 }
 
 .btn-retry {
   flex-shrink: 0;
-
   padding: 5px 10px;
-
-  border: 1px solid #dc2626;
+  border: 1px solid var(--error);
   border-radius: 5px;
-
-  background: #ffffff;
-  color: #dc2626;
-
+  background: var(--base-bg);
+  color: var(--error);
   cursor: pointer;
   font-size: 12px;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .btn-retry:hover {
-  background: #fee2e2;
+  background: var(--error);
+  color: var(--base-bg);
 }
 
 /* ============================================================
@@ -88,33 +85,26 @@
   display: flex;
   align-items: center;
   gap: 8px;
-
   min-height: 38px;
-
   padding: 7px 10px;
-
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--base-border-color);
   border-radius: 6px;
-
-  background: #f9fafb;
-
+  background: var(--base-bg);
   font-size: 12px;
 }
 
 .portal-url-bar > span:first-child {
   flex: 1;
-
   min-width: 0;
-
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-
-  color: #6b7280;
+  color: var(--base-text-color);
+  opacity: 0.65;
 }
 
 .portal-url-bar strong {
-  color: #374151;
+  color: var(--base-text-color);
   font-weight: 500;
 }
 
@@ -124,10 +114,9 @@
 
 .connection-status {
   flex-shrink: 0;
-
   padding-left: 8px;
-
-  color: #6b7280;
+  color: var(--base-text-color);
+  opacity: 0.65;
   font-size: 12px;
   white-space: nowrap;
 }
@@ -140,21 +129,17 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
   border: 1px solid transparent;
   border-radius: 6px;
-
   padding: 8px 14px;
-
   font-family: inherit;
   font-size: 13px;
   font-weight: 500;
-
   cursor: pointer;
-
   transition:
     background-color 0.15s ease,
     border-color 0.15s ease,
+    color 0.15s ease,
     opacity 0.15s ease;
 }
 
@@ -168,40 +153,47 @@
   font-size: 12px;
 }
 
-/* Secondary */
+/* ============================================================
+   SECONDARY
+   ============================================================ */
 
 .btn-secondary {
-  border-color: #d1d5db;
-  background: #ffffff;
-  color: #374151;
+  border-color: var(--base-border-color);
+  background: var(--base-bg);
+  color: var(--base-text-color);
 }
 
 .btn-secondary:hover:not(:disabled) {
-  background: #f3f4f6;
-  border-color: #9ca3af;
+  background: var(--base-primary);
+  border-color: var(--base-primary);
+  color: var(--base-bg);
 }
 
-/* Primary */
+/* ============================================================
+   PRIMARY
+   ============================================================ */
 
 .btn-primary {
-  background: #2563eb;
-  color: #ffffff;
+  background: var(--base-accent);
+  color: var(--base-bg);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: #1d4ed8;
+  background: var(--base-primary);
 }
 
-/* Danger */
+/* ============================================================
+   DANGER
+   ============================================================ */
 
 .btn-danger {
-  border-color: #dc2626;
-  background: #dc2626;
-  color: #ffffff;
+  border-color: var(--error);
+  background: var(--error);
+  color: var(--base-bg);
 }
 
 .btn-danger:hover:not(:disabled) {
-  background: #b91c1c;
+  background: var(--base-accent);
 }
 
 /* ============================================================
@@ -210,37 +202,28 @@
 
 .progress-bar {
   position: relative;
-
   width: 100%;
   height: 6px;
-
   margin-top: 14px;
-
   overflow: hidden;
-
   border-radius: 999px;
-
-  background: #e5e7eb;
+  background: var(--base-border-color);
 }
 
 .progress-bar .bar {
   height: 100%;
-
   border-radius: inherit;
-
-  background: #2563eb;
-
+  background: var(--base-accent);
   transition: width 0.25s ease;
 }
 
 .progress-bar .text {
   position: absolute;
-
   top: 9px;
   right: 0;
-
   font-size: 11px;
-  color: #6b7280;
+  color: var(--base-text-color);
+  opacity: 0.65;
 }
 
 /* ============================================================
@@ -249,27 +232,19 @@
 
 .iframe-wrapper {
   position: relative;
-
   flex: 1;
-
   min-height: 0;
-
   width: 100%;
-
-  background: #f3f4f6;
-
+  background: var(--base-bg);
   overflow: hidden;
 }
 
 .iframe {
   display: block;
-
   width: 100%;
   height: 100%;
-
   border: 0;
-
-  background: #ffffff;
+  background: var(--base-bg);
 }
 
 /* ============================================================
@@ -278,46 +253,38 @@
 
 .iframe-loader {
   position: absolute;
-
   inset: 0;
-
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
-  background: #ffffff;
-
+  background: var(--base-bg);
   z-index: 2;
 }
 
 .iframe-loader p {
   margin: 10px 0 0;
-
-  color: #374151;
-
+  color: var(--base-text-color);
   font-size: 14px;
 }
 
 .iframe-loader .loader-sub {
   margin-top: 4px;
-
-  color: #9ca3af;
-
+  color: var(--base-text-color);
+  opacity: 0.55;
   font-size: 12px;
 }
 
-/* Spinner */
+/* ============================================================
+   SPINNER
+   ============================================================ */
 
 .spinner {
   width: 32px;
   height: 32px;
-
-  border: 3px solid #e5e7eb;
-  border-top-color: #2563eb;
-
+  border: 3px solid var(--base-border-color);
+  border-top-color: var(--base-accent);
   border-radius: 50%;
-
   animation: portal-spin 0.8s linear infinite;
 }
 
@@ -339,16 +306,11 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-
   gap: 8px;
-
   flex-shrink: 0;
-
   padding: 14px 28px;
-
-  border-top: 1px solid #e5e7eb;
-
-  background: #ffffff;
+  border-top: 1px solid var(--base-border-color);
+  background: var(--base-bg);
 }
 
 /* ============================================================
@@ -357,21 +319,18 @@
 
 .portal-tip {
   flex-shrink: 0;
-
   padding: 10px 28px;
-
-  border-top: 1px solid #f3f4f6;
-
-  background: #f9fafb;
-
-  color: #6b7280;
-
+  border-top: 1px solid var(--base-border-color);
+  background: var(--base-bg);
+  color: var(--base-text-color);
+  opacity: 0.7;
   font-size: 12px;
   line-height: 1.5;
 }
 
 .portal-tip strong {
-  color: #374151;
+  color: var(--base-text-color);
+  opacity: 1;
 }
 
 /* ============================================================

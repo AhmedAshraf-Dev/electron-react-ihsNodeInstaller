@@ -1,3 +1,7 @@
+/* ============================================================
+   STEP INDICATOR
+   ============================================================ */
+
 .step-indicator-wrapper {
   display: flex;
   align-items: center;
@@ -6,98 +10,193 @@
   padding: 1rem 0;
 }
 
-/* Modern Pill-Style Back Button */
+/* ============================================================
+   MODERN PILL-STYLE BACK BUTTON
+   ============================================================ */
+
 .step-back-button {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+
   padding: 0.5rem 1rem;
   border-radius: 9999px;
-  background-color: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  color: #ffffff;
+
+  background-color: var(--base-primary);
+  border: 1px solid var(--base-border-color);
+
+  color: var(--base-bg);
+
   font-size: 0.875rem;
   font-weight: 500;
+
   cursor: pointer;
+
   backdrop-filter: blur(8px);
-  transition: all 0.2s ease-in-out;
+
+  transition:
+    background-color 0.2s ease-in-out,
+    border-color 0.2s ease-in-out,
+    transform 0.2s ease-in-out;
 }
 
 .step-back-button:hover {
-  background-color: rgba(255, 255, 255, 0.25);
+  background-color: var(--base-accent);
+  border-color: var(--base-accent);
   transform: translateY(-1px);
 }
+
+/* ============================================================
+   STEP INDICATOR CONTAINER
+   ============================================================ */
 
 .step-indicator-container {
   display: flex;
   align-items: center;
   flex-grow: 1;
+  min-width: 0;
 }
+
+/* ============================================================
+   STEP ITEM
+   ============================================================ */
 
 .step-item {
   display: flex;
   align-items: center;
   position: relative;
   flex: 1;
+  min-width: 0;
 }
 
 .step-item:last-child {
   flex: initial;
 }
 
+/* ============================================================
+   STEP CONTENT
+   ============================================================ */
+
 .step-content {
   display: flex;
   flex-direction: column;
   align-items: center;
+
   gap: 0.5rem;
+
   z-index: 2;
+
+  min-width: max-content;
 }
+
+/* ============================================================
+   STEP CIRCLE
+   ============================================================ */
 
 .step-circle {
   width: 2.25rem;
   height: 2.25rem;
+
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.2);
-  color: rgba(255, 255, 255, 0.7);
+
+  background-color: var(--base-border-color);
+  color: var(--base-text-color);
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   font-weight: 600;
-  transition: all 0.3s ease;
+
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .step-circle.active {
-  background-color: #ffffff;
-  color: #4f46e5;
-  box-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
+  background-color: var(--base-bg);
+  color: var(--base-accent);
+
+  box-shadow: 0 0 12px var(--base-overlay);
 }
 
 .step-circle.completed {
-  background-color: #10b981;
-  color: #ffffff;
+  background-color: var(--success);
+  color: var(--base-bg);
 }
+
+/* ============================================================
+   STEP LABEL
+   ============================================================ */
 
 .step-label {
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.6);
+
+  color: var(--base-text-color);
+
+  opacity: 0.6;
+
   white-space: nowrap;
+
+  transition:
+    color 0.3s ease,
+    opacity 0.3s ease;
 }
 
 .step-label.active,
 .step-label.completed {
-  color: #ffffff;
+  color: var(--base-text-color);
+  opacity: 1;
   font-weight: 600;
 }
 
+/* ============================================================
+   STEP LINE
+   ============================================================ */
+
 .step-line {
   height: 2px;
+
   flex-grow: 1;
-  background-color: rgba(255, 255, 255, 0.2);
+
+  background-color: var(--base-border-color);
+
   margin: 0 0.5rem;
-  margin-bottom: 1.25rem; /* Align line with circles, accounting for label height below */
+  margin-bottom: 1.25rem;
+
   transition: background-color 0.3s ease;
 }
 
 .step-line.active {
-  background-color: #ffffff;
+  background-color: var(--base-accent);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 700px) {
+  .step-indicator-wrapper {
+    gap: 0.75rem;
+  }
+
+  .step-back-button {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .step-label {
+    font-size: 0.65rem;
+  }
+
+  .step-circle {
+    width: 2rem;
+    height: 2rem;
+    font-size: 0.8rem;
+  }
+
+  .step-line {
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
+  }
 }
