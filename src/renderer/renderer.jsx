@@ -8,8 +8,11 @@ import { PrinterStep } from "./components/PrinterStep";
 import { useSetup } from "./hooks/AppHooks/useStep.js";
 
 import "./styles/App.css";
+// import "../index.css";
 import LanguageSelector from "./components/LanguageSelector";
 import Language, { LanguageContext } from "./context/Language.jsx";
+import { getStepIndexByKey } from "./hooks/AppHooks/setup/constants.js";
+import InstallationLocation from "./components/InstallationLocation.jsx";
 
 function App() {
   const { Right, localization } = useContext(LanguageContext);
@@ -31,12 +34,13 @@ function App() {
 
     steps,
 
-    handlePrinterNext,
+    handleNextStep,
     handleSetupComplete,
     handleInstall,
     handleReinstall,
     handleCancel,
-    handlePortalNext,
+
+    handlePreviousStep,
   } = useSetup();
 
   useEffect(() => {
@@ -47,16 +51,25 @@ function App() {
   // ==========================================================
 
   const renderStep = () => {
-    switch (currentStep) {
+    switch (currentStep?.key) {
       // ========================================================
       // STEP 1
       // ========================================================
 
-      case "printer":
+      case "PRINTER":
         return (
           <PrinterStep
-            printerConfig={printerConfig}
-            onNext={handlePrinterNext}
+            setupResponse={setupResponse}
+            onNext={handleNextStep}
+            loading={loading}
+            error={error}
+          />
+        );
+      case "InstallationLocation":
+        return (
+          <InstallationLocation
+            setupResponse={setupResponse}
+            onNext={handleNextStep}
             loading={loading}
             error={error}
           />
@@ -66,17 +79,17 @@ function App() {
       // STEP 2
       // ========================================================
 
-      case "portal":
+      case "PORTAL":
         return (
           <PortalStep
             portalUrl={portalUrl}
-            printerConfig={printerConfig}
+            setupResponse={setupResponse}
             onSetupComplete={handleSetupComplete}
             onCancel={handleCancel}
             loading={loading}
             error={error}
             progress={progress}
-            handlePortalNext={handlePortalNext}
+            handlePortalNext={handleNextStep}
           />
         );
 
@@ -84,11 +97,10 @@ function App() {
       // STEP 3
       // ========================================================
 
-      case "review":
+      case "REVIEW":
         return (
           <ReviewStep
             setupResponse={setupResponse}
-            printerConfig={printerConfig}
             onInstall={handleInstall}
             onCancel={handleCancel}
             loading={loading}
@@ -101,7 +113,7 @@ function App() {
       // STEP 4
       // ========================================================
 
-      case "complete":
+      case "COMPLETE":
         return (
           <CompleteStep
             setupResponse={setupResponse}
@@ -113,51 +125,92 @@ function App() {
         );
 
       default:
-        return <div>Loading...</div>;
+        return <div>{localization?.setup?.loading || "Loading..."}</div>;
     }
   };
 
   // ==========================================================
   // RENDER
   // ==========================================================
+  const isStepBackVisible = getStepIndexByKey(currentStep?.key) > 0;
 
   return (
-    <div className="setup-container">
-      {/* ======================================================
-          HEADER
-          ====================================================== */}
+    <div className="setup-container flex h-screen min-h-0 flex-col">
+      {/* HEADER */}
+      <header className="setup-header shrink-0">
+        <div className="header-top-bar">
+          <div className="brand-group">
+            <div className="logo-wrapper">
+              <img
+                src="/assets/icons/icon.svg"
+                alt="IHS Portal"
+                className="logo"
+              />
+            </div>
 
-      <header className="setup-header">
-        <div className="logo-container">
-          <img src="/assets/icons/icon.svg" alt="IHS Portal" className="logo" />
+            <div className="brand-titles">
+              <h1 className="brand-title">
+                {localization?.setup?.title || "IHS Portal Setup"}
+              </h1>
 
-          <h1>IHS Portal Setup</h1>
-          <LanguageSelector open={true} />
+              <p className="brand-subtitle">
+                {localization?.setup?.subtitle ||
+                  "System Configuration & Onboarding"}
+              </p>
+            </div>
+          </div>
+
+          <div className="header-actions">
+            <LanguageSelector open={true} />
+
+            <button
+              type="button"
+              className="btn-back-modern"
+              onClick={handlePreviousStep}
+              aria-label="Go back to previous step"
+              disabled={!isStepBackVisible}
+            >
+              <span className="back-arrow">{Right ? "→" : "←"}</span>
+
+              <span className="back-text">
+                {localization?.setup?.back || "Back"}
+              </span>
+            </button>
+          </div>
         </div>
 
-        <StepIndicator currentStep={currentStep} steps={steps} />
+        <div className="header-stepper-container">
+          <StepIndicator
+            currentStep={currentStep}
+            steps={steps}
+            handlePreviousStep={handlePreviousStep}
+          />
+        </div>
       </header>
 
-      {/* ======================================================
-          CONTENT
-          ====================================================== */}
+      {/* SCROLLABLE CONTENT */}
+      <main className="setup-content min-h-0 flex-1 overflow-y-auto">
+        <div className="content-card">{renderStep()}</div>
+      </main>
 
-      <main className="setup-content">{renderStep()}</main>
-
-      {/* ======================================================
-          FOOTER
-          ====================================================== */}
-
-      <footer className="setup-footer">
-        <div className="footer-info">
-          <span>Version 1.0.0</span>
-
-          <span>© 2024 IHS Technologies</span>
+      {/* FOOTER */}
+      <footer className="setup-footer shrink-0">
+        <div className="footer-meta">
+          <span className="footer-badge">v1.0.0</span>
 
           {setupResponse?.sessionId && (
-            <span>Session: {setupResponse.sessionId.substring(0, 8)}</span>
+            <span className="footer-session">
+              <span className="dot-indicator"></span>
+              {localization?.setup?.session || "Session:"}{" "}
+              <code>{setupResponse.sessionId.substring(0, 8)}</code>
+            </span>
           )}
         </div>
+
+        <p className="footer-copyright">
+          {localization?.setup?.copyright ||
+            "© 2024 IHS Technologies. All rights reserved."}
+        </p>
       </footer>
     </div>
   );

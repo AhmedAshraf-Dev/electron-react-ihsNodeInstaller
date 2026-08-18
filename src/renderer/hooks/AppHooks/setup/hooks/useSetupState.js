@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { DEFAULT_PORTAL_URL, STEPS } from "../constants";
+import { DEFAULT_PORTAL_URL,getStepByKey, STEPS_CONFIG } from "../constants";
 
 export function useSetupState() {
-  const [currentStep, setCurrentStep] = useState(STEPS.PRINTER);
+  const [currentStep, setCurrentStep] = useState(STEPS_CONFIG[0]);
   const [printerConfig, setPrinterConfig] = useState(null);
   const [portalConfig, setPortalConfig] = useState(null);
   const [setupResponse, setSetupResponse] = useState(null);

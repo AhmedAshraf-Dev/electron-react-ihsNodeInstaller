@@ -1,0 +1,103 @@
+.step-indicator-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+  padding: 1rem 0;
+}
+
+/* Modern Pill-Style Back Button */
+.step-back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  background-color: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: all 0.2s ease-in-out;
+}
+
+.step-back-button:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.step-indicator-container {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.step-item {
+  display: flex;
+  align-items: center;
+  position: relative;
+  flex: 1;
+}
+
+.step-item:last-child {
+  flex: initial;
+}
+
+.step-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  z-index: 2;
+}
+
+.step-circle {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.step-circle.active {
+  background-color: #ffffff;
+  color: #4f46e5;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
+}
+
+.step-circle.completed {
+  background-color: #10b981;
+  color: #ffffff;
+}
+
+.step-label {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+  white-space: nowrap;
+}
+
+.step-label.active,
+.step-label.completed {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.step-line {
+  height: 2px;
+  flex-grow: 1;
+  background-color: rgba(255, 255, 255, 0.2);
+  margin: 0 0.5rem;
+  margin-bottom: 1.25rem; /* Align line with circles, accounting for label height below */
+  transition: background-color 0.3s ease;
+}
+
+.step-line.active {
+  background-color: #ffffff;
+}

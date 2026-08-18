@@ -37,6 +37,7 @@ contextBridge.exposeInMainWorld("setupAPI", {
   // ========================================================
 
   installService: (config) => ipcRenderer.invoke("install-service", config),
+  reinstallService: (config) => ipcRenderer.invoke("reinstall-service", config),
   testPrinter: (printerName) => ipcRenderer.invoke("test-printer", printerName),
   getServiceStatus: () => ipcRenderer.invoke("get-service-status"),
 

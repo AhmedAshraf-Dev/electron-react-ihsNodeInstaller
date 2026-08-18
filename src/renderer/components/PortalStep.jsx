@@ -3,8 +3,9 @@
 //  Handles iframe loading and communication with portal
 // ============================================================
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import "./PortalStep.css";
+import { LanguageContext } from "../context/Language";
 
 // ============================================================
 //  COMPONENT
@@ -18,12 +19,11 @@ export function PortalStep({
   progress,
   handlePortalNext,
 }) {
-  console.log("test 12345 portalUrl", portalUrl);
   const iframeRef = useRef(null);
   const [iframeLoaded, setIframeLoaded] = useState(false);
   const [iframeError, setIframeError] = useState(null);
   const [isConnecting, setIsConnecting] = useState(true);
-
+  const { Right, localization, Lan } = useContext(LanguageContext);
   // ============================================================
   //  EFFECTS
   // ============================================================
@@ -136,16 +136,20 @@ export function PortalStep({
   return (
     <div className="portal-step">
       <div className="portal-header">
-        <h2 className="content-title">Complete Setup in Portal</h2>
+        <h2 className="content-title">
+          {localization?.setup?.portalSetup?.title ||
+            "Complete Setup in Portal"}
+        </h2>
         <p className="content-description">
-          Complete all steps in the portal. Setup will continue automatically.
+          {localization?.setup?.portalSetup?.desc ||
+            "Complete all steps in the portal. Setup will continue automatically."}
         </p>
 
         {error && (
           <div className="error-box">
             <span>⚠️ {error}</span>
             <button className="btn-retry" onClick={onCancel}>
-              Dismiss
+              {localization?.setup?.portalSetup?.dismiss || "Dismiss"}
             </button>
           </div>
         )}
@@ -154,35 +158,38 @@ export function PortalStep({
           <div className="error-box">
             <span>❌ {iframeError}</span>
             <button className="btn-retry" onClick={handleRefresh}>
-              Retry
+              {localization?.setup?.portalSetup?.retry || "Retry"}
             </button>
           </div>
         )}
 
         <div className="portal-url-bar">
           <span>
-            Portal: <strong>{portalUrl}</strong>
+            {localization?.setup?.portalSetup?.portal || "Portal:"}
+            <strong>{portalUrl}</strong>
           </span>
           <button
             className="btn btn-secondary btn-sm"
             onClick={handleRefresh}
             disabled={loading}
           >
-            🔄 Refresh
+            {localization?.setup?.portalSetup?.refresh || "🔄 Refresh"}
           </button>
           <button
             className="btn btn-secondary btn-sm"
             onClick={handleOpenBrowser}
             disabled={loading}
           >
-            🌐 Open in Browser
+            {localization?.setup?.portalSetup?.openInBrowser ||
+              "🌐 Open in Browser"}
           </button>
           <span className="connection-status">
             {isConnecting
               ? "⏳ Connecting..."
               : iframeLoaded
-                ? "✅ Connected"
-                : "❌ Disconnected"}
+                ? localization?.setup?.portalSetup?.connected || "✅ Connected"
+                : localization?.setup?.portalSetup?.disconnected ||
+                  "❌ Disconnected"}
           </span>
         </div>
 
@@ -198,15 +205,20 @@ export function PortalStep({
         {!iframeLoaded && (
           <div className="iframe-loader">
             <div className="spinner"></div>
-            <p>Loading portal...</p>
-            <p className="loader-sub">Please wait...</p>
+            <p>
+              {localization?.setup?.portalSetup?.loadingPortal ||
+                "Loading portal..."}{" "}
+            </p>
+            <p className="loader-sub">
+              {localization?.setup?.portalSetup?.pleaseWait || "Please wait..."}
+            </p>
           </div>
         )}
 
         <iframe
           ref={iframeRef}
-          className="iframe"
-          src={`${portalUrl}`}
+          className="iframe min-h-[400px]"
+          src={`${portalUrl}?shortName=${Lan}`}
           style={{ display: iframeLoaded ? "block" : "none" }}
           onLoad={handleIframeLoad}
           onError={handleIframeError}
@@ -222,30 +234,33 @@ export function PortalStep({
           onClick={onCancel}
           disabled={loading}
         >
-          Cancel Setup
+          {localization?.setup?.cancel || "Cancel Setup"}
         </button>
         <button
           className="btn btn-secondary"
           onClick={handleRefresh}
           disabled={loading}
         >
-          Refresh Portal
+          {localization?.setup?.portalSetup?.refreshPortal || "Refresh Portal"}
         </button>
         <button
           className="btn btn-primary"
           onClick={handleOpenBrowser}
           disabled={loading}
         >
-          Open in Browser
+          {localization?.setup?.portalSetup?.openInBrowser || "Open in Browser"}
         </button>
       </div>
 
       <div className="portal-tip">
-        <strong>💡 Tip:</strong> The portal will send setup data automatically
-        when completed.
+        <strong>{localization?.setup?.portalSetup?.tip || "💡 Tip:"}</strong>
+        {localization?.setup?.portalSetup?.whenCompleted ||
+          "The portal will send setup data automatically when completed."}
+
         {!iframeLoaded && !iframeError && !isConnecting && (
           <span style={{ display: "block", marginTop: "8px" }}>
-            ⏳ Waiting for portal to load...
+            {localization?.setup?.portalSetup?.waiting ||
+              "⏳ Waiting for portal to load..."}
           </span>
         )}
       </div>

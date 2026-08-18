@@ -27,8 +27,11 @@
     "@electron-forge/plugin-fuses": "^7.8.1",
     "@electron-forge/plugin-vite": "^7.8.1",
     "@electron/fuses": "^1.8.0",
+    "autoprefixer": "^10.5.4",
     "baseline-browser-mapping": "^2.11.14",
     "electron": "36.5.0",
+    "tailwindcss": "^3.3.5",
+    "postcss": "^8.5.26",
     "vite": "^5.4.19"
   },
   "dependencies": {
@@ -41,6 +44,7 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-icons": "^5.7.0",
-    "react-router-dom": "^7.18.2"
+    "react-router-dom": "^7.18.2",
+    "tailwindcss": "^3.4.19"
   }
 }

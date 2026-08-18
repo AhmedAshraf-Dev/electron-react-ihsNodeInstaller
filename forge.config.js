@@ -4,6 +4,12 @@ const { FuseV1Options, FuseVersion } = require('@electron/fuses');
 module.exports = {
   packagerConfig: {
     asar: true,
+    extraResource: [
+      "./printer-project",
+    ],
+     win32metadata: {
+    requestedExecutionLevel: "requireAdministrator",
+  },
   },
   rebuildConfig: {},
   makers: [

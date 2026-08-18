@@ -89,14 +89,13 @@ const LanguageSelector = ({ open }) => {
       window.localStorage.setItem("localization", JSON.stringify(marge));
     }
   }, [localization, setLocalization]);
-  console.log(data?.dataSource, "data?.dataSource");
   return (
     <>
       {open ? (
         <div className="circle-container">
           <select
             id="languageSelect"
-            className="uppercase text-xs color !cursor-pointer"
+            className="uppercase text-xs color !cursor-pointer text-text"
             value={language} // Set the selected language here
             onChange={changeLanguage}
           >

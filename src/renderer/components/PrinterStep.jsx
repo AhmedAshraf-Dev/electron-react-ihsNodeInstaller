@@ -3,19 +3,18 @@ import appsettings from "../../../printer-project/Worker/appsettings.json";
 import "./PrinterStep.css";
 import { LanguageContext } from "../context/Language";
 
-export function PrinterStep({ printerConfig, onNext, loading, error }) {
-  const [installPath, setInstallPath] = useState(
-    printerConfig?.installPath || "",
-  );
+export function PrinterStep({ setupResponse, onNext, loading, error }) {
+ 
   const { localization } = useContext(LanguageContext);
 
-  const [logoPath, setLogoPath] = useState(printerConfig?.logoPath || "");
+ 
 
   const [testingPrinter, setTestingPrinter] = useState(null);
 
-  const [printerTestResults, setPrinterTestResults] = useState({});
+  const [printerTestResults, setPrinterTestResults] = useState(setupResponse?.printerTestResults||{});
   const [printers, setPrinters] = useState([]);
   const [loadingPrinters, setLoadingPrinters] = useState(true);
+  const [selectedPrinterNames, setSelectedPrinterNames] = useState({});
 
   useEffect(() => {
     const loadPrinters = async () => {
@@ -46,7 +45,7 @@ export function PrinterStep({ printerConfig, onNext, loading, error }) {
   // ==========================================================
 
   const configuredPrinters =
-    printerConfig?.printers || appsettings.Printing.Printers;
+    setupResponse?.printers || appsettings?.Printing?.Printers?.saleInvoice;
 
   // ==========================================================
   // TEST PRINTER
@@ -63,6 +62,7 @@ export function PrinterStep({ printerConfig, onNext, loading, error }) {
       setPrinterTestResults((previous) => ({
         ...previous,
         [printerId]: null,
+        
       }));
 
       if (!window.setupAPI?.testPrinter) {
@@ -127,190 +127,273 @@ export function PrinterStep({ printerConfig, onNext, loading, error }) {
   // SELECT LOGO
   // ==========================================================
 
-  const handleSelectLogo = async () => {
-    try {
-      if (!window.setupAPI?.selectLogo) {
-        return;
-      }
-
-      const result = await window.setupAPI.selectLogo();
-
-      console.log("🖼️ Selected logo:", result);
-
-      if (!result.canceled && result.path) {
-        setLogoPath(result.path);
-      }
-    } catch (err) {
-      console.error("Failed to select logo:", err);
-    }
-  };
+ 
 
   // ==========================================================
   // CONTINUE
   // ==========================================================
+const [formErrors, setFormErrors] = useState({});
+ const handleSubmit = (event) => {
+  event.preventDefault();
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const validationErrors = validateForm();
 
-    onNext({
-      printers: configuredPrinters,
-      installPath,
-      logoPath,
-    });
-  };
+  if (Object.keys(validationErrors).length > 0) {
+    setFormErrors(validationErrors);
+    return;
+  }
+
+  setFormErrors({});
+
+  const printersWithSelection = configuredPrinters.map(
+    (printer, index) => {
+      const printerId = `${
+        printer?.PrinterName || printer?.printerLabel
+      }-${index}`;
+
+      const selectedPrinterName =
+        selectedPrinterNames[printerId] ||
+        printer?.PrinterName ||
+        "";
+
+      return {
+        ...printer,
+        PrinterName: selectedPrinterName,
+      };
+    },
+  );
+
+  onNext({
+    printers: printersWithSelection,
+    printerTestResults:printerTestResults
+  });
+};
 
   // ==========================================================
   // RENDER
   // ==========================================================
+const validateForm = () => {
+  const validationErrors = {};
 
+  // 1. Installation path validation
+ 
+
+  // 2. Configured printers & testing validation
+  if (!configuredPrinters || configuredPrinters.length === 0) {
+    validationErrors.printers = "At least one printer is required.";
+  } else {
+    configuredPrinters.forEach((printer, index) => {
+      const printerId = `${printer?.PrinterName || printer?.printerLabel}-${index}`;
+
+      const selectedPrinter =
+        selectedPrinterNames[printerId] ||
+        printer?.PrinterName ||
+        "";
+
+      if (!selectedPrinter) {
+        validationErrors[`printer_${printerId}`] =
+          `Please select a printer for ${
+            printer?.printerLabel || `Printer ${index + 1}`
+          }.`;
+      } else if (!printerTestResults[printerId]?.success) {
+        // Checks if printer was tested and succeeded
+        validationErrors[`test_${printerId}`] =
+          `Please run a successful test for ${
+            printer?.printerLabel || `Printer ${index + 1}`
+          } before proceeding.`;
+      }
+    });
+  }
+
+  return validationErrors;
+};
   return (
     <div className="printer-step">
       <div className="printer-header">
-        <h2>{localization?.PrinterStep?.title || "Printer Configuration"}</h2>
+        <h2>{localization?.setup?.printerStep?.title || "Printer Configuration"}</h2>
 
         <p>
-          {localization?.PrinterStep?.desc ||
-            "Test the configured printers and configure the installation location and logo."}
+          {localization?.setup?.PrinterStep?.desc ||
+            "Test the configured printers."}
         </p>
       </div>
 
       {error && <div className="error-box">⚠️ {error}</div>}
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}  className="printer-form">
+         
         {/* ==================================================
             CONFIGURED PRINTERS
             ================================================== */}
 
         <div className="form-group">
-          <label>
-            {localization?.PrinterStep?.formLabel || "Configured Printers"}
-          </label>
+  <label>
+    {localization?.setup?.PrinterStep?.formLabel ||
+      "Configured Printers"}
+  </label>
 
-          {Object.keys(configuredPrinters).length === 0 ? (
-            <div className="no-printers">
-              {localization?.PrinterStep?.noPrinters ||
-                "No printers were configured."}
+  {configuredPrinters?.length === 0 ? (
+    <div className="no-printers">
+      {localization?.setup?.PrinterStep?.noPrinters ||
+        "No printers were configured."}
+    </div>
+  ) : (
+    <div className="configured-printers">
+      {configuredPrinters.map((printer, index) => {
+        const printerId = `${printer?.PrinterName || printer?.printerLabel}-${index}`;
+
+        const selectedPrinterName =
+          selectedPrinterNames[printerId] ||
+          printer?.PrinterName ||
+          printers?.[0]?.PrinterName ||
+          "";
+
+        const isTesting = testingPrinter === printerId;
+
+        const testResult = printerTestResults[printerId];
+const haveTest = printerTestResults[printer?.PrinterName ];
+        return (
+          <div
+            key={printerId}
+            className="configured-printer"
+          >
+            {/* ==================================================
+                PRINTER INFORMATION
+                ================================================== */}
+
+            <div className="configured-printer-info">
+              <div className="printer-name">
+                🖨️ {printer?.PrinterLabel || "Printer"}
+              </div>
             </div>
-          ) : (
-            <div className="configured-printers">
-              {Object.keys(configuredPrinters).map((key, index) => {
-                const printer = configuredPrinters?.[key]; //arr
-                const printerId = `${printer.PrinterName}-${index}`;
 
-                const isTesting = testingPrinter === printerId;
+            {/* ==================================================
+                PRINTER SELECT + TEST
+                ================================================== */}
 
-                const testResult = printerTestResults[printerId];
+            <div className="printer-selector">
 
-                return (
-                  <div key={printerId} className="configured-printer">
-                    {/* Printer information */}
+              <select
+                className="form-select"
+                value={selectedPrinterName}
+                onChange={(e) => {
+                  setSelectedPrinterNames((previous) => ({
+                    ...previous,
+                    [printerId]: e.target.value,
+                  }));
 
-                    <div className="configured-printer-info">
-                      <div className="printer-name">🖨️ {key}</div>
-                    </div>
+                  // Clear previous test result when printer changes
+                  setPrinterTestResults((previous) => ({
+                    ...previous,
+                    [printerId]: null,
+                    
+                  }));
+                }}
+                disabled={
+                  loading ||
+                  loadingPrinters ||
+                  testingPrinter !== null
+                }
+              >
+                <option value="">
+                  {localization?.setup?.PrinterStep?.selectPrinter ||
+                    "Select printer"}
+                </option>
 
-                    {/* Test button */}
+                {printers?.map((sysPrinter, printerIndex) => (
+                  <option
+                    key={sysPrinter?.name || printerIndex}
+                    value={sysPrinter?.name || ""}
+                  >
+                    {sysPrinter?.displayName ||
+                      sysPrinter?.name ||
+                      "Unknown Printer"}
+                  </option>
+                ))}
+              </select>
 
-                    <button
-                      type="button"
-                      className="btn btn-secondary test-printer-btn"
-                      onClick={() => handleTestPrinter(printer, printerId)}
-                      disabled={loading || testingPrinter !== null}
-                    >
-                      {isTesting
-                        ? localization?.PrinterStep?.testingButtonText ||
-                          "Testing..."
-                        : localization?.PrinterStep?.testButtonText ||
-                          "Test Printer"}
-                    </button>
+              {/* TEST BUTTON */}
 
-                    {/* Test result */}
+              <button
+                type="button"
+                className="btn btn-secondary test-printer-btn"
+                onClick={() => {
+                  if (!selectedPrinterName) {
+                    return;
+                  }
 
-                    {testResult && (
-                      <div
-                        className={
-                          testResult.success
-                            ? "printer-test-success"
-                            : "printer-test-error"
-                        }
-                      >
-                        {testResult.success ? "✓" : "⚠️"} {testResult.message}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
+                  handleTestPrinter(
+                    {
+                      ...printer,
+                      PrinterName: selectedPrinterName,
+                    },
+                    printerId
+                  );
+                }}
+                disabled={
+                  loading ||
+                  loadingPrinters ||
+                  testingPrinter !== null ||
+                  !selectedPrinterName
+                }
+              >
+                {isTesting
+                  ? localization?.setup?.PrinterStep
+                      ?.testingButtonText || "Testing..."
+                  : localization?.setup?.PrinterStep
+                      ?.testButtonText || "Test"}
+              </button>
             </div>
-          )}
-        </div>
 
-        {/* ==================================================
-            INSTALLATION LOCATION
-            ================================================== */}
+            {/* ==================================================
+                TEST RESULT
+                ================================================== */}
 
-        <div className="form-group">
-          <label>Installation Location</label>
-
-          <div className="path-input">
-            <input
-              type="text"
-              value={installPath}
-              readOnly
-              placeholder="Select installation location"
-              disabled={loading}
-            />
-
-            <button
-              type="button"
-              className="btn btn-secondary"
-              onClick={handleSelectDirectory}
-              disabled={loading}
-            >
-              Browse
-            </button>
+            {testResult && (
+              <div
+                className={
+                  testResult.success
+                    ? "printer-test-success"
+                    : "printer-test-error"
+                }
+              >
+                {testResult.success ? "✓" : "⚠️"}{" "}
+                {testResult.message}
+              </div>
+            )}
           </div>
-        </div>
+        );
+      })}
+    </div>
+  )}
+</div>
 
-        {/* ==================================================
-            LOGO
-            ================================================== */}
+     
 
-        <div className="form-group">
-          <label>Logo</label>
-
-          <div className="path-input">
-            <input
-              type="text"
-              value={logoPath}
-              readOnly
-              placeholder="Select logo"
-              disabled={loading}
-            />
-
-            <button
-              type="button"
-              className="btn btn-secondary"
-              onClick={handleSelectLogo}
-              disabled={loading}
-            >
-              Browse
-            </button>
-          </div>
-        </div>
+   
 
         {/* ==================================================
             ACTION
             ================================================== */}
-
+   {Object.keys(formErrors).length > 0 && (
+    <div className="error-box">
+      {localization?.setup?.required ||
+      "⚠️ Please complete all required fields before continuing."}
+      
+    </div>
+  )}
         <div className="printer-actions">
           <button
             type="submit"
             className="btn btn-primary"
             disabled={loading || configuredPrinters.length === 0}
           >
-            Continue
+            {localization?.setup?.continue ||
+                "Continue"}
+            
           </button>
         </div>
+      
       </form>
     </div>
   );

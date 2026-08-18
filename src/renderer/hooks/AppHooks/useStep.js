@@ -1,5 +1,5 @@
 import { useCallback, useRef } from "react";
-import { STEPS, STEPS_CONFIG } from "./setup/constants";
+import {  getStepByKey, getStepIndexByKey, STEPS_CONFIG } from "./setup/constants";
 import { useInstallation } from "./setup/hooks/useInstallation";
 import { usePortal } from "./setup/hooks/usePortal";
 import { usePortalMessages } from "./setup/hooks/usePortalMessages";
@@ -7,7 +7,6 @@ import { useSetupActions } from "./setup/hooks/useSetupActions";
 import { useSetupInitialization } from "./setup/hooks/useSetupInitialization";
 import { useSetupState } from "./setup/hooks/useSetupState";
 
-export { STEPS } from "./setup/constants";
 
 export function useSetup() {
   const state = useSetupState();
@@ -19,7 +18,7 @@ export function useSetup() {
     progress, setProgress, serviceStatus, setServiceStatus, sessionId,
     setSessionId, safeSetState,
   } = state;
-
+ 
   useSetupInitialization({ setPortalUrl, setSetupResponse, setCurrentStep, setError });
 
   const handleSetupComplete = useCallback(async (data) => {
@@ -31,7 +30,7 @@ export function useSetup() {
         if (!result?.success) throw new Error(result?.error || result?.message || "Failed to save setup data");
       }
       safeSetState(setSetupResponse, data);
-      safeSetState(setCurrentStep, STEPS.REVIEW);
+      safeSetState(setCurrentStep, getStepByKey("REVIEW"));
       safeSetState(setProgress, 100);
       safeSetState(setLoading, false);
     } catch (err) {
@@ -42,16 +41,48 @@ export function useSetup() {
 
   usePortalMessages({ setProgress, setError, onSetupComplete: handleSetupComplete });
 
-  const handlePrinterNext = useCallback((config) => {
-    setPrinterConfig(config);
-    setCurrentStep(STEPS.PORTAL);
-  }, [setCurrentStep, setPrinterConfig]);
-  const handlePortalNext = useCallback((config) => {
-    setPortalConfig(config);
-    setCurrentStep(STEPS.REVIEW);
-  }, [setCurrentStep, setPortalConfig]);
 
-  const handleInstall = useInstallation({ printerConfig, portalConfig, setupResponse, setCurrentStep, setError, setLoading, setProgress, setServiceStatus, safeSetState });
+  const handleNextStep = useCallback((config) => {
+  const currentIndex = STEPS_CONFIG.findIndex(
+    (step) => step.key === currentStep.key
+  );
+
+  if (currentIndex < STEPS_CONFIG.length - 1) {
+    setCurrentStep(STEPS_CONFIG[currentIndex + 1]);
+    setSetupResponse((prevSetupResponse) => ({
+  ...prevSetupResponse,
+  ...config,
+}));
+  }
+}, [currentStep]);
+
+  
+const handlePreviousStep = useCallback(() => {
+  const currentIndex = getStepIndexByKey(currentStep.key);
+
+  if (currentIndex > 0) {
+    setCurrentStep(STEPS_CONFIG[currentIndex - 1]);
+  }
+}, [currentStep]);
+// At top level of component
+const runInstallation = useInstallation({
+  setupResponse,
+  setCurrentStep,
+  setError,
+  setLoading,
+  setProgress,
+  setServiceStatus,
+  safeSetState,
+});
+
+// Inside button click or install handler
+const handleInstall = (config) => {
+  const mergedPayload = { ...setupResponse, ...config };
+  setSetupResponse(mergedPayload);
+  
+  // Trigger function returned by hook
+  runInstallation(mergedPayload);
+};
   const { resetState, handleCancel, handleReinstall } = useSetupActions({ setCurrentStep, setPrinterConfig, setPortalConfig, setSetupResponse, setError, setLoading, setProgress, setServiceStatus, setSessionId });
   const { refreshPortal, openPortalInBrowser, testPortalConnection } = usePortal({ iframeRef, portalUrl, setError, setProgress, safeSetState });
 
@@ -65,14 +96,14 @@ export function useSetup() {
     currentStep, printerConfig, portalConfig, setupResponse, portalUrl,
     loading, error, progress, serviceStatus, sessionId,
     steps: STEPS_CONFIG, currentStepIndex,
-    handlePrinterNext, handleSetupComplete, handleInstall, handleCancel,
-    handleReinstall, handlePortalNext, refreshPortal, openPortalInBrowser,
+     handleSetupComplete, handleInstall, handleCancel,handleNextStep,
+    handleReinstall, refreshPortal, openPortalInBrowser,handlePreviousStep,
     testPortalConnection, clearError, resetState, setPortalUrl,
-    isPortalStep: currentStep === STEPS.PORTAL,
-    isReviewStep: currentStep === STEPS.REVIEW,
-    isCompleteStep: currentStep === STEPS.COMPLETE,
-    isInstalling: loading && currentStep === STEPS.REVIEW,
-    canInstall: !loading && !!setupResponse && currentStep === STEPS.REVIEW,
+    isPortalStep: currentStep === getStepByKey("PORTAL") ,
+    isReviewStep: currentStep === getStepByKey("REVIEW") ,
+    isCompleteStep: currentStep ===getStepByKey("COMPLETE")  ,
+    isInstalling: loading && currentStep === getStepByKey("REVIEW"),
+    canInstall: !loading && !!setupResponse && currentStep === getStepByKey("REVIEW"),
     showProgress: progress > 0 && progress < 100,
     getCurrentStep, isStepActive, getStepStatus,
   };

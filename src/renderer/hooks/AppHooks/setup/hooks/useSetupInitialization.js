@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { STEPS } from "../constants";
+
 
 export function useSetupInitialization({
   setPortalUrl,
@@ -51,8 +51,8 @@ export function useSetupInitialization({
             console.log("✅ Existing setup found.");
 
             setSetupResponse(data);
-            setCurrentStep(STEPS.REVIEW);
-
+            
+setCurrentStep(getStepByKey("REVIEW"));
             console.log("➡️ Moving to REVIEW step.");
           } else {
             console.log("ℹ️ No saved setup response found.");
